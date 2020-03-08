@@ -8,16 +8,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Routine.Api.Helpers;
+using Routine.Api.Models;
 
 namespace Routine.Api.Services
 {
     public class CompanyRespository : ICompanyRespository
     {
         private readonly RoutineDbContext routineDbContext;
+        private readonly IPropertyMappingService _propertyMappingService;
 
-        public CompanyRespository(RoutineDbContext routineDbContext)
+        public CompanyRespository(RoutineDbContext routineDbContext,IPropertyMappingService propertyMappingService)
         {
             this.routineDbContext = routineDbContext ?? throw new ArgumentNullException(nameof(routineDbContext));
+            _propertyMappingService = propertyMappingService ?? throw new ArgumentNullException(nameof(propertyMappingService));
         }
         public void AddCompany(Company company)
         {
@@ -73,18 +76,15 @@ namespace Routine.Api.Services
             {
                 throw new ArgumentNullException(nameof(parameters));
             }
-            var queryExperssion = this.routineDbContext.Companies as IQueryable<Company>;
-            if (!string.IsNullOrWhiteSpace(parameters.CompanyName))
-            {
-                queryExperssion = queryExperssion.Where(x => x.Name == parameters.CompanyName.Trim());
-            }
+            var queryExpression = this.routineDbContext.Companies as IQueryable<Company>;
             if (!string.IsNullOrWhiteSpace(parameters.SearchQuery))
             {
                 parameters.SearchQuery = parameters.SearchQuery.Trim();
-                queryExperssion = queryExperssion.Where(x => x.Name.Contains(parameters.SearchQuery) || x.Introduction.Contains(parameters.SearchQuery));
+                queryExpression = queryExpression.Where(x => x.Name.Contains(parameters.SearchQuery) || x.Introduction.Contains(parameters.SearchQuery));
             }
-
-            return await PageList<Company>.CreateAsync(queryExperssion, parameters.PageNumber, parameters.PageSize);
+            var mappingDictionary = this._propertyMappingService.GetPropertyMapping<CompanyDto, Company>();
+            queryExpression = queryExpression.ApplySort(parameters.OrderBy, mappingDictionary);
+            return await PageList<Company>.CreateAsync(queryExpression, parameters.PageNumber, parameters.PageSize);
         }
 
         public async Task<IEnumerable<Company>> GetCompaniesAsync(IEnumerable<Guid> companyIds)
@@ -101,23 +101,35 @@ namespace Routine.Api.Services
             return await this.routineDbContext.Companies.FirstOrDefaultAsync(c => c.Id == companyId);
         }
 
-        public async Task<IEnumerable<Employee>> GetEmployeesAsync(Guid companyId, string displayGender, string searchQuery)
+        public async Task<PageList<Employee>> GetEmployeesAsync(Guid companyId, EmployeeParameters parameters)
         {
             if (companyId == Guid.Empty)
+            {
                 throw new ArgumentNullException(nameof(companyId));
-            var employees = await this.routineDbContext.Employees.ToListAsync();
-            if (string.IsNullOrWhiteSpace(displayGender) && string.IsNullOrWhiteSpace(searchQuery))
-                return employees.Where(e => e.companyId == companyId).OrderBy(x => x.employeeNo);
+            }
+                
+
+
             var items = this.routineDbContext.Employees.Where(e => e.companyId == companyId);
 
-            if (!string.IsNullOrWhiteSpace(displayGender))
-                items = items.Where(e => e.Gender == Enum.Parse<Gender>(displayGender.Trim()));
-            if (!string.IsNullOrWhiteSpace(searchQuery))
+            if (!string.IsNullOrWhiteSpace(parameters.SearchQuery))
             {
-                searchQuery = searchQuery.Trim();
-                items = items.Where(e => e.employeeNo.Contains(searchQuery) || e.firstName.Contains(searchQuery) || e.lastName.Contains(searchQuery));
+                parameters.SearchQuery = parameters.SearchQuery.Trim();
+                items = items.Where(x => x.firstName.Contains(parameters.SearchQuery) || x.lastName.Contains(parameters.SearchQuery)|| x.employeeNo.Contains(parameters.SearchQuery));
             }
-            return await items.OrderBy(x => x.employeeNo).ToListAsync();
+
+            if (!string.IsNullOrWhiteSpace(parameters.Gender))
+                items = items.Where(e => e.Gender == Enum.Parse<Gender>(parameters.Gender.Trim()));
+            if (!string.IsNullOrWhiteSpace(parameters.Q))
+            {
+                parameters.Q = parameters.Q.Trim();
+                items = items.Where(e => e.employeeNo.Contains(parameters.Q) || e.firstName.Contains(parameters.Q) || e.lastName.Contains(parameters.Q));
+            }
+
+            var mappingDictionary = _propertyMappingService.GetPropertyMapping<EmployeeDto, Employee>();
+            items = items.ApplySort(parameters.OrderBy, mappingDictionary);
+
+            return await PageList<Employee>.CreateAsync(items, parameters.PageNumber, parameters.PageSize);
 
 
 

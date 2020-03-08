@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Routine.Api.Migrations
 {
-    public partial class InitData : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,6 +13,9 @@ namespace Routine.Api.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(maxLength: 100, nullable: false),
+                    Country = table.Column<string>(maxLength: 100, nullable: false),
+                    Industry = table.Column<string>(maxLength: 50, nullable: false),
+                    Product = table.Column<string>(maxLength: 50, nullable: false),
                     Introduction = table.Column<string>(maxLength: 500, nullable: false)
                 },
                 constraints: table =>
@@ -40,28 +43,63 @@ namespace Routine.Api.Migrations
                         column: x => x.companyId,
                         principalTable: "Companies",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
                 table: "Companies",
-                columns: new[] { "Id", "Introduction", "Name" },
-                values: new object[] { new Guid("da7ee895-bb98-4b80-b0f1-d9d86fef8c95"), "Great Company", "Microsoft" });
+                columns: new[] { "Id", "Country", "Industry", "Introduction", "Name", "Product" },
+                values: new object[] { new Guid("da7ee895-bb98-4b80-b0f1-d9d86fef8c95"), "USA", "Software", "Great Company", "Microsoft", "Software" });
 
             migrationBuilder.InsertData(
                 table: "Companies",
-                columns: new[] { "Id", "Introduction", "Name" },
-                values: new object[] { new Guid("1544a292-1c80-4595-bc4a-2a4952fc5c1f"), "Don't be evil", "Google" });
+                columns: new[] { "Id", "Country", "Industry", "Introduction", "Name", "Product" },
+                values: new object[] { new Guid("1544a292-1c80-4595-bc4a-2a4952fc5c1f"), "USA", "Internet", "Don't be evil", "Google", "Software" });
 
             migrationBuilder.InsertData(
                 table: "Companies",
-                columns: new[] { "Id", "Introduction", "Name" },
-                values: new object[] { new Guid("d030761a-7ab4-4235-9232-def88be14d4a"), "Fubao Company", "Alipapa" });
+                columns: new[] { "Id", "Country", "Industry", "Introduction", "Name", "Product" },
+                values: new object[] { new Guid("d030761a-7ab4-4235-9232-def88be14d4a"), "China", "Internet", "Fubao Company", "Alipapa", "Software" });
 
             migrationBuilder.InsertData(
                 table: "Employees",
                 columns: new[] { "Id", "Gender", "companyId", "dateOfBirth", "employeeNo", "firstName", "lastName" },
                 values: new object[] { new Guid("9665c8ef-03d4-4af1-87bc-d84cdaded5f5"), 1, new Guid("da7ee895-bb98-4b80-b0f1-d9d86fef8c95"), new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "1wckk9NbrGGUSZU4", "Bruce", "Forster" });
+
+            migrationBuilder.InsertData(
+                table: "Employees",
+                columns: new[] { "Id", "Gender", "companyId", "dateOfBirth", "employeeNo", "firstName", "lastName" },
+                values: new object[] { new Guid("bc4873aa-623f-4069-96a4-76c323f39e82"), 2, new Guid("da7ee895-bb98-4b80-b0f1-d9d86fef8c95"), new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "1wckk9NbrGGUSZU4", "Bruce", "Forster" });
+
+            migrationBuilder.InsertData(
+                table: "Employees",
+                columns: new[] { "Id", "Gender", "companyId", "dateOfBirth", "employeeNo", "firstName", "lastName" },
+                values: new object[] { new Guid("d2f3d4bd-984a-49f9-9dfc-394cd204158b"), 1, new Guid("da7ee895-bb98-4b80-b0f1-d9d86fef8c95"), new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "1wckk9NbrGGUSZU4", "Bruce", "Forster" });
+
+            migrationBuilder.InsertData(
+                table: "Employees",
+                columns: new[] { "Id", "Gender", "companyId", "dateOfBirth", "employeeNo", "firstName", "lastName" },
+                values: new object[] { new Guid("43f76027-229b-435f-95f6-d47fa4f8e7d5"), 2, new Guid("da7ee895-bb98-4b80-b0f1-d9d86fef8c95"), new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "1wckk9NbrGGUSZU4", "Bruce", "Forster" });
+
+            migrationBuilder.InsertData(
+                table: "Employees",
+                columns: new[] { "Id", "Gender", "companyId", "dateOfBirth", "employeeNo", "firstName", "lastName" },
+                values: new object[] { new Guid("5ff6be02-52cd-4914-af1f-b6b1f73dffdd"), 1, new Guid("da7ee895-bb98-4b80-b0f1-d9d86fef8c95"), new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "1wckk9NbrGGUSZU4", "Bruce", "Forster" });
+
+            migrationBuilder.InsertData(
+                table: "Employees",
+                columns: new[] { "Id", "Gender", "companyId", "dateOfBirth", "employeeNo", "firstName", "lastName" },
+                values: new object[] { new Guid("14427c90-cc70-421a-a25d-11f9e3a1e5a7"), 2, new Guid("da7ee895-bb98-4b80-b0f1-d9d86fef8c95"), new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "1wckk9NbrGGUSZU4", "Bruce", "Forster" });
+
+            migrationBuilder.InsertData(
+                table: "Employees",
+                columns: new[] { "Id", "Gender", "companyId", "dateOfBirth", "employeeNo", "firstName", "lastName" },
+                values: new object[] { new Guid("c5f415f7-edf8-4894-99f3-08c35e80f871"), 1, new Guid("da7ee895-bb98-4b80-b0f1-d9d86fef8c95"), new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "1wckk9NbrGGUSZU4", "Bruce", "Forster" });
+
+            migrationBuilder.InsertData(
+                table: "Employees",
+                columns: new[] { "Id", "Gender", "companyId", "dateOfBirth", "employeeNo", "firstName", "lastName" },
+                values: new object[] { new Guid("75d0c702-cf15-4064-a7c9-f58685be0d94"), 2, new Guid("da7ee895-bb98-4b80-b0f1-d9d86fef8c95"), new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "1wckk9NbrGGUSZU4", "Bruce", "Forster" });
 
             migrationBuilder.InsertData(
                 table: "Employees",

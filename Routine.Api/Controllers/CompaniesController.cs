@@ -30,7 +30,7 @@ namespace Routine.Api.Controllers
         }
         [HttpGet(Name = nameof(GetCompanies))]
         [HttpHead]
-        public async Task<ActionResult<IEnumerable<CompanyDto>>> GetCompanies([FromQuery]CompanyParameters parameters)
+        public async Task<IActionResult> GetCompanies([FromQuery]CompanyParameters parameters)
         {
             var companies = await this.companyRespository.GetCompaniesAsync(parameters);
 
@@ -54,7 +54,7 @@ namespace Routine.Api.Controllers
                 Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
             }));
             var companyDtos = mapper.Map<IEnumerable<CompanyDto>>(companies);
-            return Ok(companyDtos); 
+            return Ok(companyDtos.ShapeData(parameters.Fields)); 
         }
         [HttpGet("{companyId}", Name = nameof(GetCompany))]
         public async Task<ActionResult<CompanyDto>> GetCompany(Guid companyId)
@@ -87,7 +87,7 @@ namespace Routine.Api.Controllers
                 return NotFound();
             }
 
-            await companyRespository.GetEmployeesAsync(companyId, null, null);
+            await companyRespository.GetEmployeesAsync(companyId, null);
             this.companyRespository.DeleteCompany(companyEntity);
             await this.companyRespository.SaveAsync();
             return NoContent();
@@ -102,9 +102,10 @@ namespace Routine.Api.Controllers
                     {
                         return Url.Link(nameof(GetCompanies), new
                         {
+                            fields=parameters.Fields,
+                            orderBy = parameters.OrderBy,
                             pageNumber = parameters.PageNumber + 1,
                             pageSize = parameters.PageSize,
-                            companyName = parameters.CompanyName,
                             searchQuery = parameters.SearchQuery
                         });
                     }
@@ -112,19 +113,21 @@ namespace Routine.Api.Controllers
                     {
                         return Url.Link(nameof(GetCompanies), new
                         {
+                            ields = parameters.Fields,
+                            orderBy = parameters.OrderBy,
                             pageNumber = parameters.PageNumber - 1,
                             pageSize = parameters.PageSize,
-                            companyName = parameters.CompanyName,
                             searchQuery = parameters.SearchQuery
-                        });
+                        }); ;
                     }
                 default:
                     {
                         return Url.Link(nameof(GetCompanies), new
                         {
+                            ields = parameters.Fields,
+                            orderBy = parameters.OrderBy,
                             pageNumber = parameters.PageNumber,
                             pageSize = parameters.PageSize,
-                            companyName = parameters.CompanyName,
                             searchQuery = parameters.SearchQuery
                         });
                     }

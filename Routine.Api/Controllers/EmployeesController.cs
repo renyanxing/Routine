@@ -10,7 +10,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-
+using Routine.Api.Parameters;
+using Routine.Api.Helpers;
 
 namespace Routine.Api.Controllers
 {
@@ -27,20 +28,28 @@ namespace Routine.Api.Controllers
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             this.companyRespository = companyRespository ?? throw new ArgumentNullException(nameof(companyRespository));
         }
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetEmployeesForCompany(Guid companyId, [FromQuery(Name = "gender")]string genderDisplay, [FromQuery(Name = "query")] string searchQuery)
+        [HttpGet(Name = nameof(GetEmployeesForCompany))]
+        public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetEmployeesForCompany(Guid companyId, [FromQuery]EmployeeParameters parameters)
         {
             if (!await this.companyRespository.CompanyExistsAsync(companyId))
                 NotFound();
 
 
-            var employees = await this.companyRespository.GetEmployeesAsync(companyId, genderDisplay, searchQuery);
+            var employees = await this.companyRespository.GetEmployeesAsync(companyId, parameters);
+            var previousPageLink = employees.HasPrevious
+    ? CreateEmployeesResourceUri(parameters, ResourceUriType.PriviousPage)
+    : null;
+            var nextPageLink = employees.HasNext
+                ? CreateEmployeesResourceUri(parameters, ResourceUriType.NextPage)
+                : null;
+
+
             var employeeDtos = mapper.Map<IEnumerable<EmployeeDto>>(employees);
             return Ok(employeeDtos);
 
         }
         [HttpGet("{EmployeeId}", Name = nameof(GetEmployeeForCompany))]
-        public async Task<ActionResult<EmployeeDto>> GetEmployeeForCompany(Guid companyId, Guid employeeId, [FromQuery(Name = "gender")]string genderDisplay)
+        public async Task<ActionResult<EmployeeDto>> GetEmployeeForCompany(Guid companyId, Guid employeeId)
         {
             if (!await this.companyRespository.CompanyExistsAsync(companyId))
                 NotFound();
@@ -112,8 +121,8 @@ namespace Routine.Api.Controllers
                     await this.companyRespository.SaveAsync();
                     var dto = this.mapper.Map<EmployeeDto>(employeeToAdd);
                     return CreatedAtRoute(nameof(GetEmployeeForCompany),
-                        new {companyId = companyId, employeeId = dto.Id}, dto);
-                } 
+                        new { companyId = companyId, employeeId = dto.Id }, dto);
+                }
             }
             var dtoToPatch = this.mapper.Map<EmployeeUpdateDto>(employeeEntity);
 
@@ -145,13 +154,50 @@ namespace Routine.Api.Controllers
             }
             this.companyRespository.DeleteEmployee(employee);
             await this.companyRespository.SaveAsync();
-            return NoContent() ; 
+            return NoContent();
         }
 
         public override ActionResult ValidationProblem(ModelStateDictionary modelStateDictionary)
         {
             var options = HttpContext.RequestServices.GetRequiredService<IOptions<ApiBehaviorOptions>>();
             return (ActionResult)options.Value.InvalidModelStateResponseFactory(ControllerContext);
+        }
+        private string CreateEmployeesResourceUri(EmployeeParameters parameters, ResourceUriType type)
+        {
+            switch (type)
+            {
+                case ResourceUriType.NextPage:
+                    {
+                        return Url.Link(nameof(GetEmployeesForCompany), new
+                        {
+                            orderBy = parameters.OrderBy,
+                            pageNumber = parameters.PageNumber + 1,
+                            pageSize = parameters.PageSize,
+                            searchQuery = parameters.SearchQuery
+                        });
+                    }   
+                case ResourceUriType.PriviousPage:
+                    {
+                        return Url.Link(nameof(GetEmployeesForCompany), new
+                        {
+                            orderBy = parameters.OrderBy,
+                            pageNumber = parameters.PageNumber - 1,
+                            pageSize = parameters.PageSize,
+
+                            searchQuery = parameters.SearchQuery
+                        }); ;
+                    }
+                default:
+                    {
+                        return Url.Link(nameof(GetEmployeesForCompany), new
+                        {
+                            orderBy = parameters.OrderBy,
+                            pageNumber = parameters.PageNumber,
+                            pageSize = parameters.PageSize,
+                            searchQuery = parameters.SearchQuery
+                        });
+                    }
+            }
         }
     }
 

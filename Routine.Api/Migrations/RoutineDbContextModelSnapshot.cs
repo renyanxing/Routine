@@ -22,6 +22,16 @@ namespace Routine.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Industry")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(50);
+
                     b.Property<string>("Introduction")
                         .IsRequired()
                         .HasColumnType("TEXT")
@@ -32,6 +42,11 @@ namespace Routine.Api.Migrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(100);
 
+                    b.Property<string>("Product")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(50);
+
                     b.HasKey("Id");
 
                     b.ToTable("Companies");
@@ -40,20 +55,29 @@ namespace Routine.Api.Migrations
                         new
                         {
                             Id = new Guid("da7ee895-bb98-4b80-b0f1-d9d86fef8c95"),
+                            Country = "USA",
+                            Industry = "Software",
                             Introduction = "Great Company",
-                            Name = "Microsoft"
+                            Name = "Microsoft",
+                            Product = "Software"
                         },
                         new
                         {
                             Id = new Guid("1544a292-1c80-4595-bc4a-2a4952fc5c1f"),
+                            Country = "USA",
+                            Industry = "Internet",
                             Introduction = "Don't be evil",
-                            Name = "Google"
+                            Name = "Google",
+                            Product = "Software"
                         },
                         new
                         {
                             Id = new Guid("d030761a-7ab4-4235-9232-def88be14d4a"),
+                            Country = "China",
+                            Industry = "Internet",
                             Introduction = "Fubao Company",
-                            Name = "Alipapa"
+                            Name = "Alipapa",
+                            Product = "Software"
                         });
                 });
 
@@ -98,6 +122,76 @@ namespace Routine.Api.Migrations
                         {
                             Id = new Guid("9665c8ef-03d4-4af1-87bc-d84cdaded5f5"),
                             Gender = 1,
+                            companyId = new Guid("da7ee895-bb98-4b80-b0f1-d9d86fef8c95"),
+                            dateOfBirth = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            employeeNo = "1wckk9NbrGGUSZU4",
+                            firstName = "Bruce",
+                            lastName = "Forster"
+                        },
+                        new
+                        {
+                            Id = new Guid("bc4873aa-623f-4069-96a4-76c323f39e82"),
+                            Gender = 2,
+                            companyId = new Guid("da7ee895-bb98-4b80-b0f1-d9d86fef8c95"),
+                            dateOfBirth = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            employeeNo = "1wckk9NbrGGUSZU4",
+                            firstName = "Bruce",
+                            lastName = "Forster"
+                        },
+                        new
+                        {
+                            Id = new Guid("d2f3d4bd-984a-49f9-9dfc-394cd204158b"),
+                            Gender = 1,
+                            companyId = new Guid("da7ee895-bb98-4b80-b0f1-d9d86fef8c95"),
+                            dateOfBirth = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            employeeNo = "1wckk9NbrGGUSZU4",
+                            firstName = "Bruce",
+                            lastName = "Forster"
+                        },
+                        new
+                        {
+                            Id = new Guid("43f76027-229b-435f-95f6-d47fa4f8e7d5"),
+                            Gender = 2,
+                            companyId = new Guid("da7ee895-bb98-4b80-b0f1-d9d86fef8c95"),
+                            dateOfBirth = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            employeeNo = "1wckk9NbrGGUSZU4",
+                            firstName = "Bruce",
+                            lastName = "Forster"
+                        },
+                        new
+                        {
+                            Id = new Guid("5ff6be02-52cd-4914-af1f-b6b1f73dffdd"),
+                            Gender = 1,
+                            companyId = new Guid("da7ee895-bb98-4b80-b0f1-d9d86fef8c95"),
+                            dateOfBirth = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            employeeNo = "1wckk9NbrGGUSZU4",
+                            firstName = "Bruce",
+                            lastName = "Forster"
+                        },
+                        new
+                        {
+                            Id = new Guid("14427c90-cc70-421a-a25d-11f9e3a1e5a7"),
+                            Gender = 2,
+                            companyId = new Guid("da7ee895-bb98-4b80-b0f1-d9d86fef8c95"),
+                            dateOfBirth = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            employeeNo = "1wckk9NbrGGUSZU4",
+                            firstName = "Bruce",
+                            lastName = "Forster"
+                        },
+                        new
+                        {
+                            Id = new Guid("c5f415f7-edf8-4894-99f3-08c35e80f871"),
+                            Gender = 1,
+                            companyId = new Guid("da7ee895-bb98-4b80-b0f1-d9d86fef8c95"),
+                            dateOfBirth = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            employeeNo = "1wckk9NbrGGUSZU4",
+                            firstName = "Bruce",
+                            lastName = "Forster"
+                        },
+                        new
+                        {
+                            Id = new Guid("75d0c702-cf15-4064-a7c9-f58685be0d94"),
+                            Gender = 2,
                             companyId = new Guid("da7ee895-bb98-4b80-b0f1-d9d86fef8c95"),
                             dateOfBirth = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             employeeNo = "1wckk9NbrGGUSZU4",
@@ -181,7 +275,7 @@ namespace Routine.Api.Migrations
                     b.HasOne("Routine.Api.Entities.Company", "Company")
                         .WithMany("Employees")
                         .HasForeignKey("companyId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

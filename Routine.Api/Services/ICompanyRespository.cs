@@ -19,7 +19,7 @@ namespace Routine.Api.Services
         Task<bool> CompanyExistsAsync(Guid companyId);
 
 
-        Task<IEnumerable<Employee>> GetEmployeesAsync(Guid companyId, string displayGender, string searchQuery);
+        Task<PageList<Employee>> GetEmployeesAsync(Guid companyId, EmployeeParameters parameters);
         Task<Employee> GetEmployeeAsync(Guid companyId, Guid employeeId);
         void AddEmployee(Guid companyId, Employee emplpyee);
         void UpdateEmployee(Employee emplpyee);

@@ -18,7 +18,13 @@ namespace Routine.Api.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Company>().Property(x => x.Name).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<Company>().Property(x => x.Industry).IsRequired().HasMaxLength(50);
+            modelBuilder.Entity<Company>().Property(x => x.Product).IsRequired().HasMaxLength(50);
+            modelBuilder.Entity<Company>().Property(x => x.Country).IsRequired().HasMaxLength(100);
+
+
             modelBuilder.Entity<Company>().Property(x => x.Introduction).IsRequired().HasMaxLength(500);
+
             modelBuilder.Entity<Employee>().Property(x => x.employeeNo).IsRequired().HasMaxLength(10);
             modelBuilder.Entity<Employee>().Property(x => x.firstName).IsRequired().HasMaxLength(50);
             modelBuilder.Entity<Employee>().Property(x => x.lastName).IsRequired().HasMaxLength(50);
@@ -32,18 +38,28 @@ namespace Routine.Api.Data
                 {
                     Id = Guid.Parse("da7ee895-bb98-4b80-b0f1-d9d86fef8c95"),
                     Name = "Microsoft",
-                    Introduction = "Great Company"
+                    Introduction = "Great Company",
+                    Country="USA",
+                    Industry="Software",
+                    Product = "Software",
                 },
                 new Company
                 {
                     Id = Guid.Parse("1544a292-1c80-4595-bc4a-2a4952fc5c1f"),
                     Name = "Google",
+                    Country = "USA",
+                    Industry = "Internet",
+                    Product = "Software",
+
                     Introduction = "Don't be evil"
                 },
                 new Company
                 {
                     Id = Guid.Parse("d030761a-7ab4-4235-9232-def88be14d4a"),
                     Name = "Alipapa",
+                    Country = "China",
+                    Industry = "Internet",
+                    Product = "Software",
                     Introduction = "Fubao Company"
                 });
 
@@ -57,7 +73,80 @@ namespace Routine.Api.Data
                     lastName = "Forster",
                     Gender = Gender.男,
                     dateOfBirth = new DateTime(1990, 01, 01)
+                }, 
+                new Employee
+                {
+                    Id = Guid.Parse("bc4873aa-623f-4069-96a4-76c323f39e82"),
+                    companyId = Guid.Parse("da7ee895-bb98-4b80-b0f1-d9d86fef8c95"),
+                    employeeNo = "1wckk9NbrGGUSZU4",
+                    firstName = "Bruce",
+                    lastName = "Forster",
+                    Gender = Gender.女,
+                    dateOfBirth = new DateTime(1990, 01, 01)
                 },
+                new Employee
+                {
+                    Id = Guid.Parse("d2f3d4bd-984a-49f9-9dfc-394cd204158b"),
+                    companyId = Guid.Parse("da7ee895-bb98-4b80-b0f1-d9d86fef8c95"),
+                    employeeNo = "1wckk9NbrGGUSZU4",
+                    firstName = "Bruce",
+                    lastName = "Forster",
+                    Gender = Gender.男,
+                    dateOfBirth = new DateTime(1990, 01, 01)
+                },
+                new Employee
+                {
+                    Id = Guid.Parse("43f76027-229b-435f-95f6-d47fa4f8e7d5"),
+                    companyId = Guid.Parse("da7ee895-bb98-4b80-b0f1-d9d86fef8c95"),
+                    employeeNo = "1wckk9NbrGGUSZU4",
+                    firstName = "Bruce",
+                    lastName = "Forster",
+                    Gender = Gender.女,
+                    dateOfBirth = new DateTime(1990, 01, 01)
+                },
+                new Employee
+                {
+                    Id = Guid.Parse("5ff6be02-52cd-4914-af1f-b6b1f73dffdd"),
+                    companyId = Guid.Parse("da7ee895-bb98-4b80-b0f1-d9d86fef8c95"),
+                    employeeNo = "1wckk9NbrGGUSZU4",
+                    firstName = "Bruce",
+                    lastName = "Forster",
+                    Gender = Gender.男,
+                    dateOfBirth = new DateTime(1990, 01, 01)
+                },
+                new Employee
+                {
+                    Id = Guid.Parse("14427c90-cc70-421a-a25d-11f9e3a1e5a7"),
+                    companyId = Guid.Parse("da7ee895-bb98-4b80-b0f1-d9d86fef8c95"),
+                    employeeNo = "1wckk9NbrGGUSZU4",
+                    firstName = "Bruce",
+                    lastName = "Forster",
+                    Gender = Gender.女,
+                    dateOfBirth = new DateTime(1990, 01, 01)
+                },
+                new Employee
+                {
+                    Id = Guid.Parse("c5f415f7-edf8-4894-99f3-08c35e80f871"),
+                    companyId = Guid.Parse("da7ee895-bb98-4b80-b0f1-d9d86fef8c95"),
+                    employeeNo = "1wckk9NbrGGUSZU4",
+                    firstName = "Bruce",
+                    lastName = "Forster",
+                    Gender = Gender.男,
+                    dateOfBirth = new DateTime(1990, 01, 01)
+                },
+                new Employee
+                {
+                    Id = Guid.Parse("75d0c702-cf15-4064-a7c9-f58685be0d94"),
+                    companyId = Guid.Parse("da7ee895-bb98-4b80-b0f1-d9d86fef8c95"),
+                    employeeNo = "1wckk9NbrGGUSZU4",
+                    firstName = "Bruce",
+                    lastName = "Forster",
+                    Gender = Gender.女,
+                    dateOfBirth = new DateTime(1990, 01, 01)
+                },
+
+
+
                 new Employee
                 {
                     Id = Guid.Parse("12bcfa41-5b5c-45e9-aa34-5a7a52183584"),
